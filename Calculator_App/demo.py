@@ -6,15 +6,16 @@ x = 0
 
 def get_number(num):
     global x
-    display.insert(i,num)
+    display.insert(x,num)
     x += 1
 
-def delete_number():
-    global x
-    if x > 0:
-        display.delete(x - 1 , x)
-        x -= 1
 
+
+def get_operation(op):
+    global x
+    length = len(op)
+    display.insert(x,op)
+    x += length
     
 
 
@@ -44,9 +45,10 @@ count = 0
 for i in range(4):
     for j in range(3):
         if count < len(operations):
-            button = Button(root , text= operations[count] , width=3 , height=3)
+            op = operations[count]
+            button = Button(root , text= op , width=3 , height=3  ,command= lambda text = op:get_operation(text))
             count += 1
             button.grid(row=i+2 , column=j + 6)
-button = Button(root , text = "del" , width=3 , height=3 ,  command=delete_number)
-button.grid(row= 5 , column= 8)
+
+
 root.mainloop()
