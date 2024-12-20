@@ -1,22 +1,53 @@
 import psycopg2
 import json
 
-def createTable(filename , tableName , ):
-    with open(filename , "r") as file:
-        config = json.load(file)
-    con = psycopg2.connect(**config)
-    cur = con.cursor()
-    cur.execute("""create table students (
-                student_id serial primary key ,
-                 name text ,
-                 address text ,
-                 age int ,
-                 number text);""")
-    print("Student table created")
-    con.commit()
-    con.close()
+
+#Not safe for SQl Injections
+def createTable(filename , tableName , attributes ,pk=None ):
+
+    """
+    Creates a table in the PostgreSQL database with the given attributes.
+
+    Parameters:
+        config_file (str): Path to the JSON file containing database configuration.
+        table_name (str): Name of the table to create.
+        attributes (list): List of attribute definitions (e.g., ["name TEXT", "age INT"]).
+        pk (str, optional): Primary key definition (e.g., "id SERIAL PRIMARY KEY").
+    
+    Raises:
+        ValueError: If the attributes list is empty.
+        psycopg2.DatabaseError: If there's an error executing the query.
+    """
+    if not attributes:
+        raise ValueError("Attributes list cannot be empty.")
+    
+    attribute_str = ", ".join(attributes)
+
+    if pk:
+        query = f"CREATE TABLE {tableName} ({pk}, {attribute_str});"
+    else:
+        query = f"CREATE TABLE {tableName} ({attribute_str});"
 
 
+    #Load database config
+    try:
+        with open(filename , "r") as file:
+            config = json.load(file)
+    except FileNotFoundError:
+        raise FileNotFoundError(f"Configuration file '{filename}' not found.")
+    
+    #Execute query
+    try:
+        con = psycopg2.connect(**config)
+        cur = con.cursor()
+        cur.execute(query)
+        con.commit()
+    except psycopg2.DatabaseError as e:
+        print(f"Error creating table '{tableName}': {e}")
+        raise
+    finally:
+        if con:
+            con.close()
 
 
 def insertData(filename , tableName ,values):
@@ -54,7 +85,7 @@ def insertData(filename , tableName ,values):
     
     
 
-insertData("config.json" , "students" , ["testNam1" , "testAddress1" , 999 , "12345678"])
+insertData("config.json" , "Test" , )
 
 
     
