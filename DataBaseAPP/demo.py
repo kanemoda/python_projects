@@ -1,5 +1,6 @@
 import psycopg2
 import json
+from JsonManager import load
 
 
 #Not safe for SQl Injections
@@ -48,9 +49,12 @@ def createTable(filename , tableName , attributes ,pk=None ):
     finally:
         if con:
             con.close()
+        load("lookup.json", tableName, attributes)
 
 
 def insertData(filename , tableName ,values):
+
+
     #Load database config
     with open(filename , "r") as file:
         config = json.load(file)
@@ -83,9 +87,27 @@ def insertData(filename , tableName ,values):
         if con:
             con.close()
     
-    
 
-insertData("config.json" , "Test" , )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+createTable("config.json" , "Test2" , ["Name TEXT", "Subject TEXT", "Experience INT", "Age INT", "Sex TEXT"] , "id SERIAL PRIMARY KEY")
 
 
     

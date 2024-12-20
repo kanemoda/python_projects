@@ -1,3 +1,29 @@
 {
-    "students": ["name", "address", "age", "number"]
+    "students": [
+        "name",
+        "address",
+        "age",
+        "number"
+    ],
+    "Teacher": [
+        "Name",
+        "Subject",
+        "Experience",
+        "Age",
+        "Sex"
+    ],
+    "Test1": [
+        "Name",
+        "Subject",
+        "Experience",
+        "Age",
+        "Sex"
+    ],
+    "Test2": [
+        "Name TEXT",
+        "Subject TEXT",
+        "Experience INT",
+        "Age INT",
+        "Sex TEXT"
+    ]
 }
